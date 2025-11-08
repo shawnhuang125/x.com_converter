@@ -19,67 +19,14 @@
 ## 安裝方式
 
 ### 下載專案
+- 請至以下網址下載最新版本的壓縮檔
 ```bash
-git clone https://github.com/你的帳號/X-Audio-Converter.git
-cd X-Audio-Converter
+https://github.com/shawnhuang125/x.com_converter/releases/tag/V1.0.0
 ```
 
-### 建立與啟動虛擬環境
-```bash
-python -m venv venv
-source venv/bin/activate        # macOS / Linux
-venv\Scripts\activate           # Windows
-```
-
-### 安裝依賴套件
-```bash
-pip install -r requirements.txt
-```
-
-若尚未建立 `requirements.txt`，可用以下指令產生：
-```bash
-pip freeze > requirements.txt
-```
-
----
-
-## 安裝 FFmpeg
-
-程式執行前必須安裝 [FFmpeg](https://ffmpeg.org/download.html)。
-
-### Windows 使用者
-1. 下載 FFmpeg 壓縮檔（建議使用 [Gyan.dev 版本](https://www.gyan.dev/ffmpeg/builds/)）。  
-2. 解壓縮後將 `bin` 目錄路徑加入系統環境變數 `PATH`。  
-3. 重新啟動終端機並確認是否安裝成功：
-   ```bash
-   ffmpeg -version
-   ```
-
-### macOS / Linux 使用者
-```bash
-brew install ffmpeg    # macOS
-sudo apt install ffmpeg  # Ubuntu / Debian
-```
-
----
-
-## 執行程式
-```bash
-python app.py
-```
-
-若要打包為 EXE：
-```bash
-pyinstaller --noconsole --onefile --icon=icon.ico app.py
-```
-
-打包完成後的執行檔會在 `dist/` 資料夾中。
-
----
 
 ## 授權條款
 本專案採用 MIT License。  
-可自由修改與分發，惟請保留原作者資訊。
 
 ---
 
