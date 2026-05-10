@@ -60,6 +60,10 @@ class DownloaderService:
     @staticmethod
     def get_ydl_opts(url, as_mp3, temp_dir, progress_hook, selected_res=None):
         ffmpeg_dir = config_data.get("ffmpeg_bin_dir")
+        
+        if ffmpeg_dir:
+            base_opts["ffmpeg_location"] = ffmpeg_dir
+
         browser_headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             "Accept": "*/*",

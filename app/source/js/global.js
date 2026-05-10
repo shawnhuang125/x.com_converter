@@ -119,20 +119,25 @@ function startDownload(as_mp3) {
         const data = JSON.parse(event.data);
 
         if (data.type === "meta_and_res") {
-            // 更新影片標題、封面等資訊
             updateMeta(data);
             
-            // 判斷是否需要顯示解析度選擇器
+            // --- 關鍵修正：在這裡先抓到 DOM 元素 ---
+            const resContainer = document.getElementById("res-selector-container");
+            const progressSection = document.getElementById("progress-section");
+            
             if (!as_mp3 && data.resolutions && data.resolutions.length > 0) {
-                // 下載影片且有解析度選項 -> 顯示選單
+                // 下載影片：交給選單處理
                 showResolutionSelector(data.resolutions, url, as_mp3);
             } else {
-                // 下載音訊或是沒抓到解析度清單 -> 直接發送下載指令
+                // 下載音訊：立刻顯示進度條並開始
+                if (resContainer) resContainer.style.display = "none";
+                if (progressSection) progressSection.style.display = "block"; // 現在變數定義了，這行會跑
+    
                 socket.send(JSON.stringify({ 
                     action: "start_download", 
                     url: url, 
                     as_mp3: as_mp3,
-                    resolution: null // 音訊不需要解析度
+                    resolution: null 
                 }));
             }
         }
@@ -170,28 +175,36 @@ function applyLanguage(lang) {
     const dict = LANG_MAP[lang];
     if (!dict) return;
 
-    // 取得所有需要變更文字的元素
-    const elements = {
-        "ui-title": document.getElementById("ui-title"),
-        "url-input": document.getElementById("url-input"),
-        "btn-download-v": document.getElementById("btn-download-v"),
-        "btn-download-a": document.getElementById("btn-download-a"),
-        "btn-stop": document.getElementById("btn-stop"),
-        "lang-toggle": document.getElementById("lang-toggle"),
-        "url-label": document.querySelector(".lang-url"),
-        "welcome-title": dict["welcome-title"],
-        "welcome-text": dict["welcome-text"],
-        "welcome-start-btn": dict["welcome-start-btn"]
+    // 定義所有可能需要更新的元素與對應的字典 Key
+    const mapping = {
+        "ui-title": "ui-title",
+        "url-input": "url-input-placeholder", // 特殊處理 placeholder
+        "btn-download-v": "btn-download-v",
+        "btn-download-a": "btn-download-a",
+        "btn-stop": "btn-stop",
+        "lang-toggle": "lang-toggle",
+        "welcome-title": "welcome-title",
+        "welcome-text": "welcome-text",
+        "welcome-start-btn": "welcome-start-btn"
     };
 
-    // 批量更新文字
-    if (elements["ui-title"]) elements["ui-title"].innerText = dict["ui-title"];
-    if (elements["url-input"]) elements["url-input"].placeholder = dict["url-input-placeholder"];
-    if (elements["btn-download-v"]) elements["btn-download-v"].innerText = dict["btn-download-v"];
-    if (elements["btn-download-a"]) elements["btn-download-a"].innerText = dict["btn-download-a"];
-    if (elements["btn-stop"]) elements["btn-stop"].innerText = dict["btn-stop"];
-    if (elements["lang-toggle"]) elements["lang-toggle"].innerText = dict["lang-toggle"];
-    if (elements["url-label"]) elements["url-label"].innerText = dict["lang-url"];
+    // 跑迴圈自動更新
+    Object.keys(mapping).forEach(id => {
+        const el = document.getElementById(id);
+        const dictKey = mapping[id];
+        
+        if (el) {
+            if (id === "url-input") {
+                el.placeholder = dict[dictKey];
+            } else {
+                el.innerText = dict[dictKey];
+            }
+        }
+    });
+
+    // 處理 class 選取器（例如影片網址標籤）
+    const urlLabel = document.querySelector(".lang-url");
+    if (urlLabel) urlLabel.innerText = dict["lang-url"];
 
     // 儲存狀態
     currentLang = lang;
@@ -211,28 +224,25 @@ window.addEventListener("DOMContentLoaded", () => {
 
 function showResolutionSelector(resList, url, as_mp3) {
     const container = document.getElementById("res-selector-container");
-    const pillsWrapper = document.getElementById("res-pills-container");
     const progressSection = document.getElementById("progress-section");
+    const pillsWrapper = document.getElementById("res-pills-container");
 
-    // 1. 隱藏進度條，顯示按鈕區
-    progressSection.style.display = "none";
+    // 顯示選單，隱藏進度條
     container.style.display = "block";
+    if (progressSection) progressSection.style.display = "none";
+    
     pillsWrapper.innerHTML = "";
 
-    // 2. 只顯示到 4K (2160p) 以下的解析度
     const filteredRes = resList.filter(res => res <= 2160);
-
     filteredRes.forEach(res => {
         const btn = document.createElement("button");
         btn.className = "res-pill-btn";
         btn.innerText = res + "P";
         
         btn.onclick = () => {
-            // A. 隱藏按鈕區，顯示進度條
             container.style.display = "none";
-            progressSection.style.display = "block";
+            if (progressSection) progressSection.style.display = "block"; // 選擇後顯示進度條
 
-            // B. 發送下載請求
             socket.send(JSON.stringify({ 
                 action: "start_download", 
                 url: url, 
@@ -240,7 +250,6 @@ function showResolutionSelector(resList, url, as_mp3) {
                 resolution: res 
             }));
         };
-        
         pillsWrapper.appendChild(btn);
     });
 }

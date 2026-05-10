@@ -1,0 +1,25 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+.pytest_cache/
+
+# Docker & OS
+Dockerfile
+.dockerignore
+.DS_Store
+
+# 環境變數與日誌
+.env
+*.log
+
+# 專案特定 (視情況排除大型暫存檔)
+static/uploads/*

@@ -1,29 +1,20 @@
-<<<<<<< HEAD
+
 yt-dlp 
 pillow 
 requests
 ttkbootstrap
 pyinstaller
-=======
-# Web 框架與伺服器
 fastapi
 uvicorn[standard] 
 jinja2 
 python-multipart
-
-# 資料處理與非同步
 pydantic
 pydantic-settings
 python-multipart
 httpx
-
-
-
-# 日誌與工具
 python-dotenv
-
 yt-dlp 
 pillow 
 requests
 ttkbootstrap
->>>>>>> 233094f (Initial commit with FastAPI Web Application.)
+
