@@ -17,4 +17,5 @@ yt-dlp
 pillow 
 requests
 ttkbootstrap
+pydantic-settings
 

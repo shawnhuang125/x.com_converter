@@ -50,9 +50,31 @@ yarn-debug.log*
 yarn-error.log*
 
 # --- 測試與分析 ---
-.target/
+.target/ß
 .pytest_cache/
 .coverage
 htmlcov/
 .mypy_cache/
 .ruff_cache/
+
+# --- 執行檔與工具 (Binary files) ---
+# 這些檔案太大且不適合存放在 Git，通常是在本機環境使用的
+ffmpeg.exe
+ffprobe.exe
+
+# --- PyInstaller / 打包相關 ---
+# 你專案中有 app.spec，代表你可能在做打包，這些目錄不需要上傳
+app.spec
+*.spec
+
+# --- 專案特定資料夾 ---
+# 截圖中看到的 logs 目錄
+logs/
+# 暫存下載目錄（視你的程式邏輯而定）
+C:/ Downloads/
+gui/
+
+# --- 系統與暫存檔 ---
+# macOS 產生的隱藏檔（如果你是用 Mac mini 開發）
+.DS_Store
+Thumbs.db

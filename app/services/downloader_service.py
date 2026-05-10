@@ -2,6 +2,7 @@ import os
 import re
 import yt_dlp
 import asyncio
+from app.app_logger import logger
 from app.utils.config_manager import load_config
 
 config_data = load_config()
@@ -59,10 +60,12 @@ class DownloaderService:
 
     @staticmethod
     def get_ydl_opts(url, as_mp3, temp_dir, progress_hook, selected_res=None):
-        ffmpeg_dir = config_data.get("ffmpeg_bin_dir")
-        
-        if ffmpeg_dir:
-            base_opts["ffmpeg_location"] = ffmpeg_dir
+        ffmpeg_bin = config_data.get("ffmpeg_binary")
+
+        logger.info(f"YDL Context: Using FFmpeg binary at -> {ffmpeg_bin}")
+
+        if ffmpeg_bin:
+            base_opts["ffmpeg_location"] = ffmpeg_bin
 
         browser_headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -73,7 +76,7 @@ class DownloaderService:
 
         # 基礎配置
         base_opts = {
-            "ffmpeg_location": ffmpeg_dir,
+            "ffmpeg_location": ffmpeg_bin,
             "progress_hooks": [progress_hook],
             "outtmpl": os.path.join(temp_dir, "%(title)s.%(ext)s"),
             "quiet": True,

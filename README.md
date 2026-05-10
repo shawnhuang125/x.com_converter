@@ -26,9 +26,61 @@
 ## 安裝與使用方式
 
 ### 1. 下載程式
-請至 Releases 頁面下載最新版本的執行檔 (`.exe`)：
+- 請至 Releases 頁面下載最新版本的docker：https://github.com/shawnhuang125/Comma/releases/tag/v1.0.6
 
-[https://github.com/shawnhuang125/Comma/releases/tag/v1.0.5](https://github.com/shawnhuang125/Comma/releases/tag/v1.0.5)
+
+### 2. 安裝ffmpeg
+- Mac用戶
+```
+# 開啟終端機執行
+brew install ffmpeg
+```
+- 驗證安裝
+```
+which ffmpeg
+```
+- Windows用戶
+- Windows 沒有內建的套件管理，建議手動下載並手動指定路徑。
+
+- 下載：前往 `Gyan.dev` 下載 `ffmpeg-git-full.7z`。
+
+- 解壓縮：將裡面的 bin 資料夾內容（`ffmpeg.exe`, `ffplay.exe`, `ffprobe.exe`）解壓到你的專案根目錄，或是配置如下:
+
+```
+C:\ffmpeg\bin 
+```
+
+- 設定環境變數：
+
+- 將 bin 的路徑加入系統的 Path。
+
+- 或者直接在你的 `.env` 裡面寫死路徑：
+
+- 程式碼片段
+```
+FFMPEG_BINARY_PATH=C:\ffmpeg\bin\ffmpeg.exe
+```
+### 3. 配置.env
+- 將以下寫入`.env`
+- 各項參數均可調整
+
+```
+# --- 伺服器配置 (Server Settings) ---
+APP_NAME="Comma-Media-Converter"
+DEBUG=True
+HOST=0.0.0.0
+PORT=8011
+
+# --- FFmpeg 配置 (Media Tools) ---
+# 在 Mac mini 本機開發時，請取消下面這行的註解並指向你的 Homebrew 路徑
+FFMPEG_BINARY_PATH=/opt/homebrew/bin/ffmpeg
+
+# 如果是在 Docker 容器中執行，請註解掉上方路徑，或是改為容器內的標準路徑
+# FFMPEG_BINARY_PATH=/usr/bin/ffmpeg
+
+# --- 日誌配置 (Logging) ---
+LOG_LEVEL=INFO
+```
 
 ## License
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.

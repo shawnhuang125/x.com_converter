@@ -1,3 +1,4 @@
+# ./app/__init__.py
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path

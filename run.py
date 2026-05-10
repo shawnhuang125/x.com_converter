@@ -1,15 +1,18 @@
-# ./run.py
 import uvicorn
-from app import app
+import os
+import sys
+# 從你剛才定義的 app/__init__.py 導入 settings (或原本的路徑)
+from app.config import settings 
+
+# 確保根目錄在路徑中
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
 if __name__ == "__main__":
-    # 配置啟動參數
-    # host: "0.0.0.0" 允許外部訪問
-    # port: 8000 預設埠號
-    # reload: True 偵測程式碼變動後自動重啟（開發環境建議開啟）
+    # 關鍵修正：因為 app 就在 app/__init__.py 裡
+    # 所以路徑是 "app:app" 而不是 "app.main:app"
     uvicorn.run(
-        "run:app", 
-        host="127.0.0.1", 
-        port=8011, 
-        reload=True
+        "app:app", 
+        host=settings.HOST,
+        port=settings.PORT,
+        reload=settings.DEBUG 
     )

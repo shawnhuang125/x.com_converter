@@ -3,6 +3,7 @@ import json
 import platform
 import sys
 import shutil
+from app.app_logger import logger
 
 # 1. 取得核心目錄的邏輯
 def get_base_path():
@@ -46,9 +47,17 @@ def load_config():
         config["ffmpeg_path"] = base # 讓舊邏輯也能抓到資料夾
         if current_os == "Darwin":
             os.chmod(full_path, 0o755)
+
+        logger.info(f"FFmpeg detected in project bundle: {full_path}")
     else:
         # 找不到的話，最後嘗試抓系統環境變數裡的
-        config["ffmpeg_binary"] = shutil.which("ffmpeg")
+        system_ffmpeg = shutil.which("ffmpeg")
+        config["ffmpeg_binary"] = system_ffmpeg
+        
+        if system_ffmpeg:
+            logger.info(f"FFmpeg detected from system PATH: {system_ffmpeg}")
+        else:
+            logger.error("FFmpeg not found in project bundle or system PATH!")
         
     return config
 
@@ -56,5 +65,6 @@ def save_config(data):
     try:
         with open(CONFIG_FILE, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
+        logger.info(f"Configuration successfully saved to {CONFIG_FILE}")
     except Exception as e:
-        print(f"[Warning] Failed to save config: {e}")
+        logger.error(f"Failed to save config to {CONFIG_FILE}: {str(e)}", exc_info=True)
