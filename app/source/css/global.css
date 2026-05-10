@@ -1,0 +1,406 @@
+:root {
+    --bg-color: #000000;
+    --border-color: #2f3336;
+    --text-main: #e7e9ea;
+    --text-dim: #71767b;
+    --theme-color: #ff8c00;
+    --theme-hover: #e67e22;
+    --card-bg: #16181c;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column; /* 讓 nav, main, footer 垂直堆疊 */
+}
+
+/* 橫向導覽列 - 強制置頂且 100% 寬度 */
+/* 橫向導覽列 - 優化質感 */
+.navbar {
+    width: 100%;
+    height: 64px; /* 稍微縮窄一點點，更精緻 */
+    background-color: rgba(0, 0, 0, 0.75); /* 降低透明度增強毛玻璃感 */
+    backdrop-filter: blur(20px); /* 增強模糊 */
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(231, 233, 234, 0.1); /* 使用細微的白邊代替深色邊 */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: row; /* 確保內容是橫的 */
+    align-items: center;
+    padding: 0 20px;
+}
+
+.nav-logo {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--theme-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-icon {
+    background: var(--theme-color);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 0 15px rgba(255, 140, 0, 0.3); /* 合併發光感 */
+    flex-shrink: 0; /* 防止縮放變形 */
+}
+
+/* 導覽連結容器 */
+.nav-links {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    gap: 5px; /* 改小 gap，靠 nav-item 的 padding 撐開 */
+    margin-left: 40px;
+}
+
+/* 導覽選項按鈕化 */
+.nav-item {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-dim);
+    transition: all 0.2s ease;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 8px;
+    position: relative;
+    outline: none;
+}
+
+/* 懸浮效果：背景微亮 */
+.nav-item:hover {
+    color: var(--text-main);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* SPA 核心：選中狀態 */
+.nav-item.active {
+    color: var(--theme-color);
+    font-weight: 700;
+}
+
+.nav-item.active::after {
+    content: "";
+    position: absolute;
+    bottom: -14px; /* 這裡要根據 64px 高度微調，讓橘線貼在最下面 */
+    left: 20%;
+    width: 60%;
+    height: 3px;
+    background-color: var(--theme-color);
+    border-radius: 10px 10px 0 0;
+}
+
+/* 確保 Logo 圖標文字垂直置中 */
+.logo-icon {
+    background: var(--theme-color);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800; /* 加粗 C 字 */
+    box-shadow: 0 0 15px rgba(255, 140, 0, 0.3);
+    flex-shrink: 0;
+}
+
+.dynamic-card {
+    margin-top: 30px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 25px;
+    display: none; /* 由 JS 控制顯示 */
+    animation: fadeIn 0.3s ease-out; /* 增加淡入效果 */
+}
+
+.nav-links li:hover, .nav-links li.active {
+    color: var(--text-main);
+}
+
+.nav-logo {
+    cursor: pointer;
+    user-select: none;
+}
+
+
+/* 語系按鈕：更細緻的膠囊感 */
+.btn-lang {
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid rgba(255, 140, 0, 0.5); /* 邊框變淡 */
+    color: var(--text-main); /* 文字改白，僅邊框橘 */
+    padding: 6px 20px;
+    font-size: 13px;
+    transition: all 0.3s ease;
+}
+
+.btn-lang:hover {
+    border-color: var(--theme-color);
+    background: rgba(255, 140, 0, 0.1);
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.15);
+}
+
+/* 主容器佈局 */
+.main-wrapper {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 50px 20px;
+}
+
+.content-container {
+    width: 100%;
+    max-width: 650px;
+}
+
+.section-header {
+    margin-bottom: 40px;
+}
+
+.section-header h1 {
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.feed-input {
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 30px;
+    background: #000;
+}
+
+.input-group {
+    margin-bottom: 25px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--text-dim);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.input-group input {
+    width: 100%;
+    background: #000;
+    border: 1px solid var(--border-color);
+    color: #fff;
+    padding: 14px;
+    border-radius: 10px;
+    outline: none;
+    font-size: 16px;
+}
+
+.input-group input:focus {
+    border-color: var(--theme-color);
+}
+
+.input-with-btn {
+    display: flex;
+    gap: 12px;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column; /* 讓下載按鈕大一點，像截圖那樣 */
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.btn-post {
+    background: var(--theme-color);
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 9999px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+    width: 100%;
+}
+
+.btn-post:hover {
+    background: var(--theme-hover);
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 10px 20px;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-secondary:hover {
+    background: #16181c;
+}
+
+/* 下載卡片與進度條 */
+.dynamic-card {
+    margin-top: 30px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 25px;
+    display: none;
+}
+
+.preview-container {
+    display: flex;
+    gap: 20px;
+}
+
+#preview-img {
+    width: 180px;
+    aspect-ratio: 16/9;
+    background: #111;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.post-info {
+    flex: 1;
+}
+
+.post-header {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.progress-container {
+    margin-top: 20px;
+}
+
+.progress-bar-bg {
+    height: 6px;
+    background: var(--border-color);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+#progress-bar-fill {
+    height: 100%;
+    background: var(--theme-color);
+    width: 0%;
+    transition: width 0.3s;
+}
+
+.status-text {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--text-dim);
+}
+
+/* 頁尾 */
+.main-footer {
+    border-top: 1px solid var(--border-color);
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 13px;
+}
+
+.footer-content p {
+    margin-bottom: 8px;
+}
+
+#btn-stop {
+    display: none; /* 預設不佔空間 */
+    /* 其他樣式保持不變... */
+}
+
+.res-pills-flex {
+    display: flex;
+    justify-content: center; /* 核心：達成置中與對稱分配 */
+    flex-wrap: wrap;        /* 避免在小螢幕上擠壓 */
+    gap: 15px;              /* 按鈕間的固定間距 */
+    padding: 10px 0;
+    width: 100%;
+}
+
+/* 解析度按鈕容器 */
+.res-pills-container {
+    display: flex;
+    justify-content: center; /* 不管 1 個還是多個，整體都會置中 */
+    align-items: center;
+    gap: 20px;               /* 設定按鈕間的最小間距 */
+    width: 100%;
+    margin: 20px 0;
+    flex-wrap: nowrap;       /* 確保不換行，維持在一橫排 */
+}
+
+/* 膠囊按鈕 - 嚴格執行固定寬高 */
+.res-pill-btn {
+    width: 100px;           /* 固定寬度 */
+    height: 36px;           /* 固定高度 */
+    border-radius: 18px;    /* 達成完美膠囊形狀 (高度的一半) */
+    background-color: transparent;
+    color: var(--theme-color);
+    border: 1.5px solid var(--theme-color);
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.res-pill-btn:hover {
+    background-color: var(--theme-color);
+    color: #fff;
+    transform: translateY(-2px);
+}
+/* 隱藏進度條區塊的類別 */
+.u-hidden {
+    display: none !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 響應式補強 (Mobile) --- */
+@media (max-width: 600px) {
+    .nav-links { display: none; } /* 手機版暫時隱藏或改為漢堡選單 */
+    .preview-container { flex-direction: column; }
+    #preview-img { width: 100%; }
+}
